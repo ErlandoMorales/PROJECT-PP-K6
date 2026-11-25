@@ -30,3 +30,44 @@ void init_ui(void) {
         init_pair(3, COLOR_GREEN, COLOR_BLACK);  // Kunci 'K' & Pintu Keluar 'E'
     }
 }
+void draw_maze(int py, int px, int has_key) {
+    clear();
+
+   
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            char tile = map[y][x];
+
+            if (tile == '#') {
+                attron(COLOR_PAIR(2));
+                mvprintw(y, x, "%c", tile);
+                attroff(COLOR_PAIR(2));
+            } else if (tile == 'K' || tile == 'E') {
+                attron(COLOR_PAIR(3));
+                mvprintw(y, x, "%c", tile);
+                attroff(COLOR_PAIR(3));
+            } else {
+                mvprintw(y, x, "%c", tile);
+            }
+        }
+    }
+
+    attron(COLOR_PAIR(1));
+    mvprintw(py, px, "@");
+    attroff(COLOR_PAIR(1));
+
+    mvprintw(HEIGHT + 1, 0, "Kunci: %s",
+             has_key ? "SUDAH DIAMBIL (Menuju 'E')" : "BELUM ADA (Cari 'K')");
+    mvprintw(HEIGHT + 2, 0, "Gerak: WASD / Panah | Keluar: Q");
+    refresh();
+}
+
+void show_win_screen(void) {
+    clear();
+    attron(COLOR_PAIR(3));
+    mvprintw(HEIGHT / 2 - 1, 3, "SELAMAT! ANDA BERHASIL KELUAR!");
+    attroff(COLOR_PAIR(3));
+    mvprintw(HEIGHT / 2 + 1, 3, "Tekan tombol apa saja untuk selesai...");
+    refresh();
+    getch();
+}
